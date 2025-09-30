@@ -119,71 +119,19 @@
       </span>
     </div>
   </section>
-  <button type="button" onclick=t(1)>Play Sintel</button>
-  <button type="button" onclick=t(2)>Play Tears Of Steel</button>
-  <button type="button" onclick=d(1)>Download and store Sintel</button>
-  <button type="button" onclick=d(2)>Download and store Tears Of Steel</button>
+
+  <!-- Controls -->
+  <button type="button" onclick="playTorrentById('magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Fsintel.torrent')">Play Sintel</button>
+  <button type="button" onclick="playTorrentById('magnet:?xt=urn:btih:209c8226b299b308beaf2b9cd3fb49212dbd13ec&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Ftears-of-steel.torrent')">Play Tears Of Steel</button>
+  <br>
+  <button type="button" onclick="offlineDownload('magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Fsintel.torrent')">Download and store Sintel</button>
+  <button type="button" onclick="offlineDownload('magnet:?xt=urn:btih:209c8226b299b308beaf2b9cd3fb49212dbd13ec&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Ftears-of-steel.torrent')">Download and store Tears Of Steel</button>
+  <br>
   <input type="text" id='magn' placeholder="Magnet/Torrent">
-  <button type="button" onclick=client.playTorrent(magn.value)>Play Magnet/Torrent</button>
+  <button type="button" onclick=playTorrentByMagnet()>Play Magnet/Torrent</button>
 
+  <!-- Main script -->
   <script src="dist/bundle.js"></script>
-  <script>
-    const playerControls = {}
-    for (const item of document.getElementsByClassName('ctrl')) {
-      if (!playerControls[item.dataset.name]) {
-        playerControls[item.dataset.name] = item
-      } else {
-        playerControls[item.dataset.name] = [playerControls[item.dataset.name], item]
-      }
-    }
-    const client = new WebTorrentPlayer.default({
-      controls: playerControls,
-      video: video,
-      player: player,
-      burnIn: true,
-      seekTime: 2,
-      immerseTime: 10,
-      generateThumbnails: true,
-      visibilityLossPause: true
-    })
-    client.on('prev', params => console.log('User wants to play previous video!', params))
-    client.on('next', params => console.log('User wants to play next video!', params))
-    client.on('playlist', params => console.log('User wants to open playlist!', params))
-    client.on('watched', params => console.log('User watched current video!', params))
-    client.on('download-done', params => console.log('Player finished downloading a file!', params))
-    client.on('video-files', params => console.log('Player found video files!', params))
-    client.on('offline-torrent', params => console.log('Player loaded an offline stored torrent!', params))
-    client.on('no-files', params => console.error('Player couldnt find any playable video files!', params))
-    client.on('no-peers', params => console.error('Player couldnt find any peers!', params))
-
-    function d(a) {
-      switch (a) {
-        case 1:
-          client.offlineDownload('magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Fsintel.torrent')
-          break
-        case 2:
-          client.offlineDownload('magnet:?xt=urn:btih:209c8226b299b308beaf2b9cd3fb49212dbd13ec&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Ftears-of-steel.torrent')
-          break
-        case 3:
-          client.offlineDownload('magnet:?xt=urn:btih:CE9156EB497762F8B7577B71C0647A4B0C3423E1&tr=wss%3A%2F%2Ftracker.openwebtorrent.com')
-          break
-      }
-    }
-
-    function t(a) {
-      switch (a) {
-        case 1:
-          client.playTorrent('magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Fsintel.torrent')
-          break
-        case 2:
-          client.playTorrent('magnet:?xt=urn:btih:209c8226b299b308beaf2b9cd3fb49212dbd13ec&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Ftears-of-steel.torrent')
-          break
-        case 3:
-          client.playTorrent('magnet:?xt=urn:btih:CE9156EB497762F8B7577B71C0647A4B0C3423E1&tr=wss%3A%2F%2Ftracker.openwebtorrent.com')
-          break
-      }
-    }
-  </script>
 </body>
 
 </html>
