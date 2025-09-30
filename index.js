@@ -1,15 +1,3 @@
-const WebTorrentPlayer = require('webtorrent-player');
-
-// Register the service worker for offline capability
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js')
-    .then(registration => {
-      console.log('Service Worker registered with scope:', registration.scope);
-    }).catch(error => {
-      console.error('Service Worker registration failed:', error);
-    });
-}
-
 // --- Player Initialization ---
 const playerControls = {};
 for (const item of document.getElementsByClassName('ctrl')) {
@@ -24,7 +12,7 @@ const client = new WebTorrentPlayer.default({
   controls: playerControls,
   video: document.getElementById('video'),
   player: document.getElementById('player'),
-  destroyStore: false, // <- CRITICAL FOR OFFLINE: Keep torrents after playback
+  destroyStore: false, // CRITICAL FOR OFFLINE: Keep torrents after playback
   burnIn: true,
   seekTime: 2,
   immerseTime: 10,
@@ -44,20 +32,21 @@ client.on('no-files', params => console.error('Player couldnt find any playable 
 client.on('no-peers', params => console.error('Player couldnt find any peers!', params));
 
 // --- Global Functions for HTML buttons ---
-window.playTorrentByMagnet = function() {
+// These need to be global so the onclick attributes in the HTML can find them.
+function playTorrentByMagnet() {
   const magn = document.getElementById('magn');
   if (magn && magn.value) {
     client.playTorrent(magn.value);
   }
 }
 
-window.offlineDownload = function(torrentId) {
+function offlineDownload(torrentId) {
   if (torrentId) {
     client.offlineDownload(torrentId);
   }
 }
 
-window.playTorrentById = function(torrentId) {
+function playTorrentById(torrentId) {
   if (torrentId) {
     client.playTorrent(torrentId);
   }
