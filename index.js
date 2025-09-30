@@ -8,7 +8,8 @@ for (const item of document.getElementsByClassName('ctrl')) {
   }
 }
 
-const client = new WebTorrentPlayer.default({
+// Correctly instantiate the player using the global object provided by the script.
+const client = new WebTorrentPlayer({
   controls: playerControls,
   video: document.getElementById('video'),
   player: document.getElementById('player'),
@@ -17,7 +18,8 @@ const client = new WebTorrentPlayer.default({
   seekTime: 2,
   immerseTime: 10,
   generateThumbnails: true,
-  visibilityLossPause: true
+  visibilityLossPause: true,
+  client: new WebTorrent() // Pass a new WebTorrent client instance
 });
 
 // --- Event Listeners ---
