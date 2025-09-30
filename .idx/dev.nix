@@ -23,12 +23,12 @@
     previews = {
       enable = true;
       previews = {
-        # This preview starts a web server to serve the 'dist' directory.
+        # This preview starts a web server to serve the root directory ('.').
         web = {
           # Command to run: `http-server` serves the specified directory.
           # The `-p $PORT` flag is crucial to use the port assigned by IDX.
           # `--cors` is added to prevent common cross-origin issues.
-          command = [ "http-server" "dist" "-p" "$PORT" "--cors" ];
+          command = [ "http-server" "." "-p" "$PORT" "--cors" ];
           # 'web' manager opens the preview in a browser tab inside IDX.
           manager = "web";
         };
